@@ -1,35 +1,16 @@
 <html>
   <head>
-    <style>
-      path{
-        fill: none;
-        stroke: #ccc;
-        stroke-width: .5;
-      }
-     path.cdu {
-       fill: #000;
-     }
-     path.spd {
-       fill: red;
-     }
-     path.gruene {
-       fill: green;
-     }
-     #tooltip {
-       position: absolute;
-       opacity: 0;
-       padding: 5px;
-       z-index: 10;
-       background: #fff;
-       border: 1px solid #ccc;
-     }
-    </style>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+  </head>
+  <body>
+    {{content}}
+    <footer>
+    <p>Ein Project von <a href="http://codeformuenster.org">Code for Münster</a>. Datenbasis: Stadt Münster</p>
+    </footer>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="http://d3js.org/d3.geo.tile.v0.min.js"></script>
     <script src='js/underscore-min.js'></script>
     <script src='js/map.js'></script>
-  </head>
-  <body>
-    {{content}}
   </body>
 </html>
