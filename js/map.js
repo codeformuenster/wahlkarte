@@ -36,17 +36,21 @@ function tooltipHtml(d) {
   return "<p>"+d.properties.bezirkname+"</p><p>"+daten.winner.toUpperCase()+": "+Math.ceil(daten.winning_percentage*100)+"%</p>";
 }
 function tooltip(d) {
-  d3.select("#tooltip").style("left", (d3.event.pageX + 14) + "px")
+  d3.select("#tooltip")
   .html(tooltipHtml(d))
-  .style("opacity", 1)
+  .style("opacity", 1);
+}
+function tooltipPosition(d) {
+  d3.select("#tooltip").style("left", (d3.event.pageX + 14) + "px")
   .style("top", (d3.event.pageY - 22) + "px");
+
 }
 d3.csv("results.csv", function(err, daten) {
   wahldaten = daten;
   nest();
   d3.json("wahlbezirke.geojson", function(err, data) {
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#map").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -57,6 +61,7 @@ d3.csv("results.csv", function(err, daten) {
     .attr("d",path)
     .attr("class", winner)
     .attr("opacity", percentageOpacity)
-    .on("mouseover", tooltip);
+    .on("mouseover", tooltip)
+    .on("mousemove", tooltipPosition);
   });
 });
