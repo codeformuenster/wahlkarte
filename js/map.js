@@ -12,18 +12,18 @@ function makeParty(d,partyName) {
 }
 function nest() {
   wahldaten.map(function(d) { 
-    parties = ["spd","cdu","die_linke","grune","piraten","fdp","dp","uwg_ms"].map(function(partyName) { return makeParty(d,partyName) });
+    parties = ["spd","cdu","die_linke","gruene","piraten","fdp","oedp","uwg_ms"].map(function(partyName) { return makeParty(d,partyName) });
     d.winner = _.max(parties, function(d) { return d.votes; }).party;
-    d.winning_percentage = d[d.winner] / d.g_ltige_stimmen;
+    d.winning_percentage = d[d.winner] / d.gueltige_stimmen;
     return d;
   });
 }
 function wahlDataForBezirk(d) {
   wahlbezirk = d.properties.wahlbezirk;
-  daten = _.find(wahldaten, function(d) { return d.column_1 === wahlbezirk; } )
+  daten = _.find(wahldaten, function(d) { return d.wahlbezirk_nr === wahlbezirk; } )
   return daten;
 }
-function wahlData(d) {
+function winner(d) {
   daten = wahlDataForBezirk(d);
   return daten.winner;
 }
@@ -52,7 +52,7 @@ d3.csv("results.csv", function(err, daten) {
     .enter()
     .append("path")
     .attr("d",path)
-    .attr("class", wahlData)
+    .attr("class", winner)
     .on("mouseover", tooltip);
     
   });
