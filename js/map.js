@@ -1,20 +1,32 @@
 var wahldaten;
 var width = 960,
-height = 500;
+height = 650;
 
 var projection = d3.geo.mercator()
-.scale(70000)
-.center([7.627530,51.966588 ])
+.scale(98000)
+.center([7.616290, 51.942678])
 .translate([width / 2, height / 2]);
 var path = d3.geo.path().projection(projection);
-function makeParty(d,partyName) {
-  return  { party: partyName, votes: parseInt(d[partyName]) };
+partyNames = { "spd": "SPD", "cdu": "CDU", "die_linke": "Die Linke", "gruene": "Grüne", "piraten": "Piraten", "fdp": "FDP", "oedp": "ÖDP", "uwg_ms": "UWG Ms" }
+function partyName(accronym) {
+  return partyNames[accronym];
 }
-function nest() {
+function makeParty(d,partyName) {
+  return  { 
+    party: partyName, 
+    votes: parseInt(d[partyName]),
+    percentage: (parseInt(d[partyName]) / parseInt(d.gueltige_stimmen) * 100) || 0
+  };
+}
+function getWinner(parties) {
+  return _.max(parties, function(d) { return d.votes; }).party;
+}
+function addData() {
   wahldaten.map(function(d) { 
     parties = ["spd","cdu","die_linke","gruene","piraten","fdp","oedp","uwg_ms"].map(function(partyName) { return makeParty(d,partyName) });
-    d.winner = _.max(parties, function(d) { return d.votes; }).party;
-    d.winning_percentage = d[d.winner] / d.gueltige_stimmen;
+    d.winner = getWinner(parties);
+    d.partyPercentages = parties;
+    d.winning_percentage = (d[d.winner] / d.gueltige_stimmen);
     return d;
   });
 }
@@ -30,6 +42,23 @@ function winner(d) {
 function percentageOpacity(d) {
   daten = wahlDataForBezirk(d);
   return daten.winning_percentage+0.3;
+}
+function partyPercentagesHtml(parties) {
+  html = "<ul>";
+  _.sortBy(parties, function(party) { return party.percentage}).reverse().forEach(function(d) {
+    html += "<li><span>"+partyName(d.party)+":</span>&nbsp;<b>"+d3.round(d.percentage,1)+"%</b></li>";
+  });
+  html += "</ul>";
+  return html;
+}
+function addDetailData(d) {
+  daten = wahlDataForBezirk(d);
+  html = "<h2>"+d.properties.bezirkname+"</h2>"
+  html += partyPercentagesHtml(daten.partyPercentages);
+
+  d3.select("#detail")
+  .style("display", "block")
+  .html(html);
 }
 function tooltipHtml(d) {
   daten = wahlDataForBezirk(d);
@@ -47,7 +76,7 @@ function tooltipPosition(d) {
 }
 d3.csv("results.csv", function(err, daten) {
   wahldaten = daten;
-  nest();
+  addData();
   d3.json("wahlbezirke.geojson", function(err, data) {
 
     var svg = d3.select("#map").append("svg")
@@ -62,6 +91,7 @@ d3.csv("results.csv", function(err, daten) {
     .attr("class", winner)
     .attr("opacity", percentageOpacity)
     .on("mouseover", tooltip)
-    .on("mousemove", tooltipPosition);
+    .on("mousemove", tooltipPosition)
+    .on("click",addDetailData);
   });
 });
