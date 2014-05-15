@@ -27,16 +27,19 @@ function winner(d) {
   daten = wahlDataForBezirk(d);
   return daten.winner;
 }
+function percentageOpacity(d) {
+  daten = wahlDataForBezirk(d);
+  return daten.winning_percentage+0.3;
+}
 function tooltipHtml(d) {
   daten = wahlDataForBezirk(d);
-return "<p>"+d.properties.bezirkname+"</p>";
+  return "<p>"+d.properties.bezirkname+"</p><p>"+daten.winner.toUpperCase()+": "+Math.ceil(daten.winning_percentage*100)+"%</p>";
 }
 function tooltip(d) {
   d3.select("#tooltip").style("left", (d3.event.pageX + 14) + "px")
   .html(tooltipHtml(d))
   .style("opacity", 1)
   .style("top", (d3.event.pageY - 22) + "px");
-  
 }
 d3.csv("results.csv", function(err, daten) {
   wahldaten = daten;
@@ -46,14 +49,14 @@ d3.csv("results.csv", function(err, daten) {
     var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
-    
+
     svg.selectAll("path")
     .data(data.features)
     .enter()
     .append("path")
     .attr("d",path)
     .attr("class", winner)
+    .attr("opacity", percentageOpacity)
     .on("mouseover", tooltip);
-    
   });
 });
