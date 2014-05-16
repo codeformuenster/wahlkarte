@@ -18,7 +18,7 @@ footer {
   position: absolute;
   top: 40px;
   right: 40px;
-  width: 200px;
+  width: 300px;
   background: #fefefe;
   border: 1px solid #eee;
   display: none;
@@ -37,6 +37,9 @@ footer {
   list-style: none;
   padding: 5px;
   border-bottom: 1px solid #eee;
+}
+#detail ul li span.votes{
+  font-size: 10px;
 }
 path{
   fill: none;

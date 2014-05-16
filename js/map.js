@@ -14,7 +14,7 @@ function partyName(accronym) {
 function makeParty(d,partyName) {
   return  { 
     party: partyName, 
-    votes: parseInt(d[partyName]),
+    votes: parseInt(d[partyName]) || 0,
     percentage: (parseInt(d[partyName]) / parseInt(d.gueltige_stimmen) * 100) || 0
   };
 }
@@ -44,11 +44,9 @@ function percentageOpacity(d) {
   return daten.winning_percentage+0.3;
 }
 function partyPercentagesHtml(parties) {
-  html = "<ul>";
-  _.sortBy(parties, function(party) { return party.percentage}).reverse().forEach(function(d) {
-    html += "<li><span>"+partyName(d.party)+":</span>&nbsp;<b>"+d3.round(d.percentage,1)+"%</b></li>";
-  });
-  html += "</ul>";
+  partyList = _.sortBy(parties, function(party) { return party.percentage}).reverse();//.forEach(function(d) {
+  context = { parties: partyList };
+  html = templates["detail"](context);
   return html;
 }
 function addDetailData(d) {
@@ -62,7 +60,9 @@ function addDetailData(d) {
 }
 function tooltipHtml(d) {
   daten = wahlDataForBezirk(d);
-  return "<h4>Wahlkreis: "+d.properties.bezirkname+"</h4><p>"+partyName(daten.winner)+": "+Math.ceil(daten.winning_percentage*100)+"%</p>";
+  context = { bezirk: d.properties.bezirkname, partyName: partyName(daten.winner), percentage: Math.ceil(daten.winning_percentage*100) };
+  html    = templates["tooltip"](context);
+  return html;
 }
 function tooltip(d) {
   d3.select("#tooltip")
@@ -84,6 +84,7 @@ function unhighlight(d) {
 }
 d3.csv("results.csv", function(err, daten) {
   wahldaten = daten;
+  templates = parseTemplates(["tooltip","detail"]);
   addData();
   d3.json("wahlbezirke.geojson", function(err, data) {
 
