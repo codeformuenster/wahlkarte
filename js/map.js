@@ -62,7 +62,7 @@ function addDetailData(d) {
 }
 function tooltipHtml(d) {
   daten = wahlDataForBezirk(d);
-  return "<p>"+d.properties.bezirkname+"</p><p>"+daten.winner.toUpperCase()+": "+Math.ceil(daten.winning_percentage*100)+"%</p>";
+  return "<h4>Wahlkreis: "+d.properties.bezirkname+"</h4><p>"+partyName(daten.winner)+": "+Math.ceil(daten.winning_percentage*100)+"%</p>";
 }
 function tooltip(d) {
   d3.select("#tooltip")
@@ -73,6 +73,14 @@ function tooltipPosition(d) {
   d3.select("#tooltip").style("left", (d3.event.pageX + 14) + "px")
   .style("top", (d3.event.pageY - 22) + "px");
 
+}
+function highlight(d) {
+  tooltip(d);
+  d3.select(this).classed("active",true);
+}
+function unhighlight(d) {
+  d3.select("#tooltip").style("opacity",0);
+  d3.select(this).classed("active",false);
 }
 d3.csv("results.csv", function(err, daten) {
   wahldaten = daten;
@@ -90,7 +98,8 @@ d3.csv("results.csv", function(err, daten) {
     .attr("d",path)
     .attr("class", winner)
     .attr("opacity", percentageOpacity)
-    .on("mouseover", tooltip)
+    .on("mouseover", highlight)
+    .on("mouseout", unhighlight)
     .on("mousemove", tooltipPosition)
     .on("click",addDetailData);
   });
