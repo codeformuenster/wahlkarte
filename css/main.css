@@ -43,6 +43,10 @@ path{
   stroke: #ccc;
   stroke-width: .5;
 }
+path.active {
+  stroke: #fff;
+  stroke-width: 2px;
+}
 path.cdu {
   fill: #000;
 }
@@ -59,6 +63,12 @@ path.gruene {
   z-index: 10;
   background: #fff;
   border: 1px solid #ccc;
+}
+#tooltip h4 {
+  border-bottom: 1px solid #cecece;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
 }
 #tooltip p {
   margin: 5px 0;
