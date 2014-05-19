@@ -15,7 +15,7 @@ function makeParty(d,partyName) {
   return  { 
     party: partyName, 
     votes: parseInt(d[partyName]) || 0,
-    percentage: (parseInt(d[partyName]) / parseInt(d.gueltige_stimmen) * 100) || 0
+    percentage: (parseInt(d[partyName]) * 100 / parseInt(d.waehler_insgesamt) ) || 0
   };
 }
 function getWinner(parties) {
@@ -26,7 +26,7 @@ function addData() {
     parties = ["spd","cdu","die_linke","gruene","piraten","fdp","oedp","uwg_ms"].map(function(partyName) { return makeParty(d,partyName) });
     d.winner = getWinner(parties);
     d.partyPercentages = parties;
-    d.winning_percentage = (d[d.winner] / d.gueltige_stimmen);
+    d.winning_percentage = (d[d.winner] / d.waehler_insgesamt);
     return d;
   });
 }
@@ -90,7 +90,14 @@ d3.csv("results.csv", function(err, daten) {
 
     var svg = d3.select("#map").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .call(d3.behavior.zoom()
+    .on("zoom", redraw))
+    .append("g");
+
+    function redraw() {
+      svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
 
     svg.selectAll("path")
     .data(data.features)
