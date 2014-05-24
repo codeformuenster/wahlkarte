@@ -2,7 +2,7 @@ h1 {
   text-align: center;
 }
 footer {
-  margin: 40px 0 0 0;
+  margin: 20px 0 0 0;
   font-size: 12px;
 }
 #map {
@@ -10,9 +10,7 @@ footer {
   margin: 0 auto;
 }
 #explanation {
-  position: absolute;
-  top: 40px;
-  left: 10px;
+  margin: 10px 0 0;
 }
 #detail {
   position: absolute;
