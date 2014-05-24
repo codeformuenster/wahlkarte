@@ -2,15 +2,15 @@
 layout: default
 ---
 <h1>Wahlkarte für Münster</h1>
-<div id="explanation">
-  <h2>Ergebnisse der Kommunalwahl 2009</h2>
-  <p>Dargestellt sind die Gewinner der einzelnen Kommunalwahlbezirke</p>
-  <p>Alle Ergebnisse des Bezirks bei Klick</p>
-</div>
+<h2>Ergebnisse der Kommunalwahl 2009</h2>
 <div id="map"></div>
 <div id="detail"></div>
 <div id="tooltip"></div>
 
+<div id="explanation">
+  <p>Dargestellt sind die Gewinner der einzelnen Kommunalwahlbezirke<br/>
+  Alle Ergebnisse des Bezirks bei Klick</p>
+</div>
 <script id="tooltip-template" type="text/x-underscore-template">
   <h4><%- bezirk %></h4>
   <p><%-partyName%>: <%-percentage%>%</p>
