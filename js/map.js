@@ -2,11 +2,6 @@ var wahldaten;
 var width = 960,
 height = 650;
 
-var projection = d3.geo.mercator()
-.scale(98000)
-.center([7.616290, 51.942678])
-.translate([width / 2, height / 2]);
-var path = d3.geo.path().projection(projection);
 partyNames = { "spd": "SPD", "cdu": "CDU", "die_linke": "Die Linke", "gruene": "Grüne", "piraten": "Piraten", "fdp": "FDP", "oedp": "ÖDP", "uwg_ms": "UWG Ms" }
 function partyName(accronym) {
   return partyNames[accronym];
@@ -83,6 +78,14 @@ function unhighlight(d) {
   d3.select(this).classed("active",false);
 }
 d3.csv("results.csv", function(err, daten) {
+  if(window.outerWidth < width) {
+    width = window.outerWidth;
+  }
+  projection = d3.geo.mercator()
+  .scale(98000)
+  .center([7.62536, 51.9620774])
+  .translate([width / 2, height / 2]);
+  var path = d3.geo.path().projection(projection);
   wahldaten = daten;
   templates = parseTemplates(["tooltip","detail"]);
   addData();
