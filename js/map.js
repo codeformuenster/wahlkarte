@@ -2,7 +2,7 @@ var wahldaten;
 var width = 960,
 height = 650;
 
-partyNames = { "spd": "SPD", "cdu": "CDU", "die_linke": "Die Linke", "gruene": "Grüne", "piraten": "Piraten", "fdp": "FDP", "oedp": "ÖDP", "uwg_ms": "UWG Ms" }
+partyNames = { "spd": "SPD", "cdu": "CDU", "die_linke": "Die Linke", "gruene": "Grüne", "piraten": "Piraten", "fdp": "FDP", "oedp": "ÖDP", "uwg_ms": "UWG Ms", "harryismus": "Harryismus", "afd": "AfD" }
 function partyName(accronym) {
   return partyNames[accronym];
 }
