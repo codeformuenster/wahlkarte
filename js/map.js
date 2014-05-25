@@ -13,8 +13,11 @@ function makeParty(d,partyName) {
     percentage: (parseInt(d[partyName]) * 100 / parseInt(d.waehler_insgesamt) ) || 0
   };
 }
+function getWinningParty(parties) {
+  return _.max(parties, function(d) { return d.votes; });
+}
 function getWinner(parties) {
-  return _.max(parties, function(d) { return d.votes; }).party;
+  return getWinningParty(parties).party;
 }
 function addData() {
   wahldaten.map(function(d) { 
@@ -77,7 +80,14 @@ function unhighlight(d) {
   d3.select("#tooltip").style("opacity",0);
   d3.select(this).classed("active",false);
 }
-d3.csv("results.csv", function(err, daten) {
+function wahl2009() {
+  d3.csv("/wahlkarte/results.csv", function(err, daten) {
+    addData();
+    wahldaten = daten;
+  });
+}
+function mapResults() {
+
   if(window.outerWidth < width) {
     width = window.outerWidth;
   }
@@ -86,22 +96,11 @@ d3.csv("results.csv", function(err, daten) {
   .center([7.62536, 51.9620774])
   .translate([width / 2, height / 2]);
   var path = d3.geo.path().projection(projection);
-  wahldaten = daten;
   templates = parseTemplates(["tooltip","detail"]);
-  addData();
   d3.json("wahlbezirke.geojson", function(err, data) {
 
-    var svg = d3.select("#map").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .call(d3.behavior.zoom()
-    .on("zoom", redraw))
-    .append("g");
 
-    function redraw() {
-      svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-    }
-
+    svg = d3.select("#map svg");
     svg.selectAll("path")
     .data(data.features)
     .enter()
@@ -114,4 +113,24 @@ d3.csv("results.csv", function(err, daten) {
     .on("mousemove", tooltipPosition)
     .on("click",addDetailData);
   });
+}
+jQuery(function() {
+  svg = d3.select("#map").append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .call(d3.behavior.zoom()
+  .on("zoom", redraw))
+  .append("g");
+
+  function redraw() {
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  }
+  if(jQuery("#live-results").length > 0) {
+    parseLiveResults();
+    setInterval("parseLiveResults();", 5000);
+  }
+  if(jQuery("#wahl-2009").length > 0) {
+    wahl2009();
+  }
+
 });

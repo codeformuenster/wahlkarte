@@ -48,6 +48,9 @@ path.active {
   stroke: #fff;
   stroke-width: 2px;
 }
+path { 
+  fill: grey;
+}
 path.cdu {
   fill: #000;
 }
