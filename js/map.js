@@ -82,8 +82,8 @@ function unhighlight(d) {
 }
 function wahl2009() {
   d3.csv("/wahlkarte/results.csv", function(err, daten) {
-    addData();
     wahldaten = daten;
+    addData();
   });
 }
 function mapResults() {
