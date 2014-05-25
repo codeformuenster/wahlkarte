@@ -61,6 +61,7 @@ function parseLiveResults() {
       bezirke = beznamen;
       result = erg;
       perBezirk = pnamen.length;
+      jQuery("#zusatz").html(zusatz);
       d3.json("wahlbezirke.json", function(err, data) {
         wahlbezirke = data;
         for(var i=0;i<bezirke.length;i++) {
