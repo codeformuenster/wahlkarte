@@ -101,12 +101,14 @@ function mapResults() {
 
 
     svg = d3.select("#map svg");
-    svg.selectAll("path")
+    wb = svg.selectAll("path")
     .data(data.features)
-    .enter()
+
+    wb.enter()
     .append("path")
     .attr("d",path)
-    .attr("class", winner)
+
+    wb.attr("class", winner)
     .attr("opacity", percentageOpacity)
     .on("mouseover", highlight)
     .on("mouseout", unhighlight)
