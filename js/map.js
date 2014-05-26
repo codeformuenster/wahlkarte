@@ -129,7 +129,7 @@ jQuery(function() {
   }
   if(jQuery("#live-results").length > 0) {
     parseLiveResults();
-    setInterval("parseLiveResults();", 5000);
+    //setInterval("parseLiveResults();", 5000);
   }
   if(jQuery("#wahl-2009").length > 0) {
     wahl2009();
