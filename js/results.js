@@ -8,9 +8,9 @@ function getWahlbezirkNr(name) {
     var briefArr = name.match(/^[B][0-9]{3}/);
     if(briefArr && briefArr.length > 0) {
       var bezNr = name.split(" ")[0];
-      bezirkArr = bezNr.match(/[0-9]{2}$/)
+      bezirkArr = bezNr.match(/B9([0-9]{2})/)
       if(bezirkArr && bezirkArr.length > 0) {
-        return bezirkArr[0];
+        return bezirkArr[1];
       }
     }
   }
