@@ -41,22 +41,3 @@ function tooltip(d) {
   .style("opacity", 1)
   .style("top", (d3.event.pageY - 22) + "px");
 }
-d3.csv("results.csv", function(err, daten) {
-  wahldaten = daten;
-  nest();
-  d3.json("wahlbezirke.geojson", function(err, data) {
-
-    var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-    svg.selectAll("path")
-    .data(data.features)
-    .enter()
-    .append("path")
-    .attr("d",path)
-    .attr("class", winner)
-    .attr("opacity", percentageOpacity)
-    .on("mouseover", tooltip);
-  });
-});
