@@ -16,6 +16,8 @@ class @VotingMap extends Map
     paths.attr('d', @path())
       .attr('class', @featureClass)
       .attr('opacity', @featureOpacity)
+      .on('mouseover', @mouseover)
+      .on('mouseclick', @mouseclick)
     paths.exit()
       .remove()
 
@@ -40,3 +42,13 @@ class @VotingMap extends Map
     district = d.properties[@districtKey]
     dataDistrict = @dataDistrictKey
     _.find(@data, (d) -> d[dataDistrict] == district)
+
+  tooltipHtml: (d) =>
+    data = @dataForFeature(d)
+    d.properties[@districtKey]
+
+  mouseover: (d) =>
+    d3.select("#tooltip").style("left", (d3.event.pageX + 14) + "px")
+    .html(@tooltipHtml(d))
+    .style("opacity", 1)
+    .style("top", (d3.event.pageY - 22) + "px")
