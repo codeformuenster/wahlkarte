@@ -1,6 +1,30 @@
 ---
 layout: default
 ---
+<div id="live-results">
+  <h1>Wahlkarte für Münster</h1>
+  <h2>Live Ergebnisse der Kommunalwahl 2014</h2>
+  <p id="zusatz"></p>
+  <div id="map"></div>
+  <div id="detail"></div>
+  <div id="tooltip"></div>
 
-<div id="map"></div>
-<div id="tooltip"></div>
+  <div id="explanation">
+    <p>Dargestellt sind die Gewinner der einzelnen Kommunalwahlbezirke<br/>
+    Alle Ergebnisse des Bezirks bei Klick</p>
+  </div>
+</div>
+<script id="tooltip-template" type="text/x-underscore-template">
+  <h4><%- bezirk %></h4>
+  <p><%-partyName%>: <%-percentage%>%</p>
+</script>
+<script id="detail-template" type="text/x-handlebars-template">
+  <ul>
+    <% _.each( parties, function( party){ %>
+      <li>
+        <span><%- partyName(party.party) %></span>
+        <b><%- d3.round(party.percentage,1) %>% </b><span class="votes">(<%- party.votes %> Stimmen)</span>
+      </li>
+    <% }); %>
+  </ul>
+</script>
