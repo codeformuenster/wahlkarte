@@ -2,14 +2,13 @@
 ---
 class @VotingMap extends Map
   constructor: (@geojson, @data, @options) ->
-    {@electionOpacityConstant, @zoomPercentage} = _.defaults(@options, electionOpacityConstant: 0.3, zoomPercentage: 0.7)
-    @active = d3.select(null)
+    { @electionOpacityConstant } = _.defaults(@options, electionOpacityConstant: 0.3, zoomPercentage: 0.7)
     super(@geojson, @options)
 
   setKeys: (keys) ->
     {@featureClassKey, @districtKey, @dataDistrictKey, @opacityKey} = _.defaults(keys, featureClassKey: "winner", districtKey: "district", dataDistrictKey: "district", opacityKey: "opacity")
 
-  drawMap: (geojson, data) ->
+  drawMap: (geojson) ->
     paths = @svg.selectAll("path")
       .data(geojson.features)
     paths.enter()
@@ -67,29 +66,10 @@ class @VotingMap extends Map
     d3.select(element).classed("active",false)
 
   mouseclick: (d) =>
-    element = d3.event.currentTarget
-    if @active.node() == element
-      return @reset()
-    @active.classed("active", false)
-    @active = d3.select(element).classed("active", true)
+    super
+    d3.select("#detail")
+      .html(@detailResults(d))
+      .style("display", "block")
 
-    bounds = @path().bounds(d)
-    dx = bounds[1][0] - bounds[0][0]
-    dy = bounds[1][1] - bounds[0][1]
-    x = (bounds[0][0] + bounds[1][0]) / 2
-    y = (bounds[0][1] + bounds[1][1]) / 2
-    scale = @zoomPercentage / Math.max(dx / @width, dy / @height)
-    translate = [@width / 2 - scale * x, @height / 2 - scale * y]
-
-    @svg.transition()
-      .duration(750)
-      .style("stroke-width", 1.5 / scale + "px")
-      .attr("transform", "translate(" + translate + ")scale(" + scale + ")")
-  reset: =>
-    @active.classed("active", false)
-    @active = d3.select(null)
-
-    @svg.transition()
-      .duration(750)
-      .style("stroke-width", "1.5px")
-      .attr("transform", "")
+  detailResults: (d) =>
+    data = @dataForFeature(d)
