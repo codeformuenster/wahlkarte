@@ -39,7 +39,12 @@ districtResults = ->
   templates = parseTemplates(["tooltip","detail"]) unless templates
   daten = votingData["2014"]["districts"]
   data = geoData["districts"]
-  options = { width: 960, height: 600, zoomPercentage: 0.4 }
+  options = {
+    width: $('#vote-map').width()
+    height: 600
+    zoomPercentage: 0.4
+    margin: { top: 0, left: 0 }
+  }
   votingMap = new VotingMap(data,daten,options)
   mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
   votingMap.setKeys(mapKeys)
@@ -52,7 +57,7 @@ districtResults = ->
     partyList = _.sortBy(data.partyPercentages, (party) -> party.percentage).reverse()
     context = { parties: partyList, districtName: d.properties.bezirk_nam }
     templates.detail(context)
-  votingMap.render("map")
+  votingMap.render("vote-map")
 
 subDistrictData = ->
   voteData = new Votes2014(votingData["2014"]["erg"], [], votingData["2014"]["beznamen"])
@@ -109,7 +114,9 @@ init = ->
 $ ->
   templates = parseTemplates(["tooltip","detail"])
   init()
-  $('#subDistricts').click (e) ->
-    updateVoteMapForSubDistricts()
-  $('#districts').click (e) ->
-    updateVoteMapForDistricts()
+  $('form#types').on('change', 'input[type=radio]', (e) ->
+    if this.value == 'districts'
+      updateVoteMapForDistricts()
+    else
+      updateVoteMapForSubDistricts()
+  )

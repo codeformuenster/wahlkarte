@@ -1,0 +1,103 @@
+---
+---
+@import "bourbon/bourbon"
+@import "grid-settings"
+@import "base/base"
+@import "neat/neat"
+@import "components/button-group"
+
+h1
+  text-align: center
+
+footer
+  position: fixed
+  bottom: 0
+  left: 0
+  width: 100%
+  height: em(40px)
+  padding: 0.5em
+  font-size: 12px
+  background: rgba(244,244,244,0.8)
+#live-results
+  @include outer-container()
+#map
+  @include span-columns(12)
+  width: 980px
+
+  #explanation
+    @include span-columns(3 of 12)
+    font-size: 0.9em
+  #vote-map
+    @include span-columns(9 of 12)
+
+#map-type
+  @include row()
+  @include span-columns(4)
+  @include shift(4)
+  width: 500px
+
+#detail
+  position: absolute
+  top: 40px
+  right: 40px
+  width: 300px
+  background: #fefefe
+  border: 1px solid #eee
+  display: none
+
+  h2
+    border-bottom: 1px solid #cecece
+    font-size: 16px
+    margin: 0
+    padding: 5px
+
+  ul
+    margin: 0
+    padding: 0
+
+    li
+      list-style: none
+      padding: 5px
+      border-bottom: 1px solid #eee
+
+      span.votes
+        font-size: 10px
+
+path
+  fill: grey
+  stroke: #ccc
+  stroke-width: .5
+
+  &.active
+    stroke: #fff
+  &.cdu
+    fill: #000
+
+  &.spd
+    fill: red
+
+  &.gruene
+    fill: green
+
+  &:hover
+    stroke-width: 2px
+
+#tooltip
+  position: absolute
+  opacity: 0
+  padding: 5px
+  z-index: 10
+  background: #fff
+  border: 1px solid #ccc
+
+  h4
+    border-bottom: 1px solid #cecece
+    font-size: 14px
+    margin: 0
+    padding: 0
+
+  #tooltip p
+    margin: 5px 0
+    font-size: 12px
+
+
