@@ -6,7 +6,7 @@ class @VotingMap extends Map
     super(@geojson, @options)
 
   setKeys: (keys) ->
-    {@featureClassKey, @districtKey, @dataDistrictKey, @opacityKey} = _.defaults(keys, featureClassKey: "winner", districtKey: "district", dataDistrictKey: "district", opacityKey: "opacity")
+    {@featureClassKey, @districtKey, @dataDistrictKey, @opacityKey, @districtName} = _.defaults(keys, featureClassKey: "winner", districtKey: "district", dataDistrictKey: "district", opacityKey: "opacity", districtName: "bezirksname")
 
   drawMap: (geojson) ->
     paths = @svg.selectAll("path")

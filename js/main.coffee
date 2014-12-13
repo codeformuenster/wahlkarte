@@ -46,11 +46,11 @@ districtResults = ->
     margin: { top: 0, left: 0 }
   }
   votingMap = new VotingMap(data,daten,options)
-  mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
+  mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage", districtName: "bezirkname" }
   votingMap.setKeys(mapKeys)
   votingMap.tooltipHtml = (d) ->
     data = @dataForFeature(d)
-    context = { bezirk: d.properties.bezirk_nam, partyName: partyName(data.winner), percentage: Math.ceil(data.winning_percentage*100) }
+    context = { bezirk: d.properties[@districtName], partyName: partyName(data.winner), percentage: Math.ceil(data.winning_percentage*100) }
     templates.tooltip(context)
   votingMap.detailResults = (d) ->
     data = @dataForFeature(d)
@@ -74,13 +74,13 @@ districtData = ->
   voteData.data
 
 updateVoteMapForSubDistricts = ->
-  mapKeys = { featureClassKey: "winner", districtKey: "bezirk_nr", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
+  mapKeys = { featureClassKey: "winner", districtKey: "bezirk_nr", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage", districtName: "bezirk_nam" }
   geojson = geoData["subDistricts"]
   data = subDistrictData()
   updatVotingMapWithDistrictsAndData(geojson, data, mapKeys)
 
 updateVoteMapForDistricts = ->
-  mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
+  mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage", districtName: "bezirkname" }
   geojson = geoData["districts"]
   data = districtData()
   updatVotingMapWithDistrictsAndData(geojson, data, mapKeys)
