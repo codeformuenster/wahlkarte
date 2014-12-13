@@ -24,7 +24,10 @@ class @VotingMap extends Map
       .remove()
 
   update: (@geojson, @data) ->
-    @centerMap() if @autoCenter
+    if @autoCenter
+      @scale = 1
+      @translate = [0,0]
+      @centerMap()
     @drawMap(@geojson)
 
   render: (@elementId) ->
