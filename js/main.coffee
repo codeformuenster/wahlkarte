@@ -4,7 +4,7 @@ templates = []
 geoData = {}
 votingData = {}
 votingMap = {}
-subDistrictResults = ->
+partyResults = ->
   templates = parseTemplates(["tooltip","detail"])
   daten = votingData["2014"]["districts"]
   data = geoData["districts"]
@@ -38,11 +38,10 @@ subDistrictResults = ->
 districtResults = ->
   templates = parseTemplates(["tooltip","detail"]) unless templates
   daten = votingData["2014"]["districts"]
-  data = geoData["subDistricts"]
+  data = geoData["districts"]
   options = { width: 960, height: 600, zoomPercentage: 0.4 }
   votingMap = new VotingMap(data,daten,options)
-  #mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
-  mapKeys = { featureClassKey: "winner", districtKey: "bezirk_nr", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
+  mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
   votingMap.setKeys(mapKeys)
   votingMap.tooltipHtml = (d) ->
     data = @dataForFeature(d)
@@ -55,6 +54,36 @@ districtResults = ->
     templates.detail(context)
   votingMap.render("map")
 
+subDistrictData = ->
+  voteData = new Votes2014(votingData["2014"]["erg"], [], votingData["2014"]["beznamen"])
+  voteData.setResultsPerDistrict(votingData["2014"]["resultsPerDistrict"])
+  voteData.formatForSubDistricts()
+  votingData["2014"]["districts"] = voteData.data
+  voteData.data
+
+districtData = ->
+  voteData = new Votes2014(votingData["2014"]["erg"], votingData["2014"]["raw"], votingData["2014"]["beznamen"])
+  voteData.setResultsPerDistrict(votingData["2014"]["resultsPerDistrict"])
+  voteData.formatForDistricts()
+  votingData["2014"]["districts"] = voteData.data
+  voteData.data
+
+updateVoteMapForSubDistricts = ->
+  mapKeys = { featureClassKey: "winner", districtKey: "bezirk_nr", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
+  geojson = geoData["subDistricts"]
+  data = subDistrictData()
+  updatVotingMapWithDistrictsAndData(geojson, data, mapKeys)
+
+updateVoteMapForDistricts = ->
+  mapKeys = { featureClassKey: "winner", districtKey: "wahlbezirk", dataDistrictKey: "wahlbezirk_nr", opacityKey: "winning_percentage" }
+  geojson = geoData["districts"]
+  data = districtData()
+  updatVotingMapWithDistrictsAndData(geojson, data, mapKeys)
+
+updatVotingMapWithDistrictsAndData = (districts, data, mapKeys) ->
+  votingMap.setKeys(mapKeys)
+  votingMap.update(districts, data)
+
 init = ->
   d3.json "wahlbezirke.geojson", (err, data) ->
     geoData["districts"] = data
@@ -64,16 +93,15 @@ init = ->
         votingData["2009"] = daten
         votingData["2014"] = {}
         jQuery.ajax({
-          url: "http://pollfinder-codeformuenster.rhcloud.com/live-results", 
+          url: "http://pollfinder-codeformuenster.rhcloud.com/live-results",
           dataType: "script",
           success: (data, ts,jq) ->
             d3.json("wahlbezirke.json", (err, data) ->
               votingData["2014"]["raw"] = data
-              voteData = new Votes2014(erg, [], beznamen)
-              voteData.setResultsPerDistrict(pnamen.length)
-              #voteData.formatForDistricts()
-              voteData.formatForSubDistricts()
-              votingData["2014"]["districts"] = voteData.data
+              votingData["2014"]["erg"] = erg
+              votingData["2014"]["beznamen"] = beznamen
+              votingData["2014"]["resultsPerDistrict"] = pnamen.length
+              districtData()
               districtResults()
             )
           }
@@ -81,3 +109,7 @@ init = ->
 $ ->
   templates = parseTemplates(["tooltip","detail"])
   init()
+  $('#subDistricts').click (e) ->
+    updateVoteMapForSubDistricts()
+  $('#districts').click (e) ->
+    updateVoteMapForDistricts()
