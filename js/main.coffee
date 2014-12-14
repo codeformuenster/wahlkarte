@@ -120,3 +120,6 @@ $ ->
     else
       updateVoteMapForSubDistricts()
   )
+  $('#map-controll #extent a').click (e) ->
+    d3.select("#extent").classed('active', false)
+    votingMap.reset()

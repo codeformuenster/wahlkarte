@@ -23,12 +23,32 @@ footer
 #map
   @include span-columns(12)
   width: 980px
+  position: relative
 
   #explanation
-    @include span-columns(3 of 12)
+    position: absolute
+    left: 20px
+    top: 20px
+    @include span-columns(4)
     font-size: 0.9em
+    background: #ccc
+    padding: 5px
   #vote-map
-    @include span-columns(9 of 12)
+    margin: 10px
+  #map-controll
+    position: absolute
+    right: 30px
+    top: 30px
+    .controll
+      width: 30px
+      height: 30px
+      background: #fff
+      border: 1px solid #ccc
+      border-radius: 2px
+      z-index: 11
+      display: none
+      &.active
+        display: block
 
 #map-type
   @include row()
@@ -38,9 +58,9 @@ footer
 
 #detail
   position: absolute
-  top: 40px
+  top: 150px
   right: 40px
-  width: 300px
+  width: 200px
   background: #fefefe
   border: 1px solid #eee
   display: none
