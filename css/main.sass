@@ -23,12 +23,14 @@ footer
 #map
   @include span-columns(12)
   width: 980px
+  position: relative
 
   #explanation
-    @include span-columns(3 of 12)
+    position: absolute
+    left: 10px
+    top: 10px
+    @include span-columns(4)
     font-size: 0.9em
-  #vote-map
-    @include span-columns(9 of 12)
 
 #map-type
   @include row()
