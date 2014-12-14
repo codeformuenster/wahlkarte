@@ -70,6 +70,7 @@ class @VotingMap extends Map
 
   mouseclick: (d) =>
     super
+    d3.select("#extent").classed('active', @active.node())
     d3.select("#detail")
       .html(@detailResults(d))
       .style("display", "block")
