@@ -98,7 +98,7 @@ init = ->
         votingData["2009"] = daten
         votingData["2014"] = {}
         jQuery.ajax({
-          url: "http://pollfinder-codeformuenster.rhcloud.com/live-results",
+          url: "https://sdyk7yugqd.execute-api.us-east-1.amazonaws.com/data",
           dataType: "script",
           success: (data, ts,jq) ->
             d3.json("wahlbezirke.json", (err, data) ->
