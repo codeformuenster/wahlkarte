@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'jekyll'
+gem 'jekyll', '>= 2.0.3'
 gem 'coffee-script'
 
 gem 'bourbon'
